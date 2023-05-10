@@ -14,13 +14,15 @@ exports.getOneSauce = (req,res,next)=>{
 }
 /*Création d'une sauces*/
 exports.createSauce = (req,res,next)=>{
-    const sauceObject = JSON.parse(req.body.sauces)
-    delete sauceObject._id
-    delete sauceObject._userid
-    const sauces = new Sauce({
+    const sauceObject = JSON.parse(req.body.sauce)
+    console.log(sauceObject)
+    const sauces = new Sauces({
         ...sauceObject,
-        userId:req.auth.userId,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        likes: 0,
+        dislikes: 0,
+        usersLiked: [],
+        usersDisliked: []
     })
     sauces.save()
     .then(()=> {res.status(201).json({message:'Sauce enregistré'})})

@@ -1,14 +1,13 @@
-const user = require('../models/user')
+const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
 /*Module pour la création d'un compte*/
 exports.signup = (req,res,next)=>{
-    console.log(req.body.email)
-    console.log(req.body.password)
     bcrypt.hash(req.body.password,10)
     .then(hash =>{
-        const user = new user({
+        const user = new User({
             email: req.body.email,
             password: hash
         })
@@ -21,7 +20,7 @@ exports.signup = (req,res,next)=>{
 
 /*Module pour la connexion de l'utilisateur*/
 exports.login = (req,res,next)=>{
-    user.findOne({email:req.body.email})
+    User.findOne({email:req.body.email})
     .then(user =>{
         if(user === null)
         {
@@ -41,7 +40,7 @@ exports.login = (req,res,next)=>{
                         userId: user._id,
                         token:jwt.sign(
                           {userId: user._id},
-                          'TOKEN_SECRET',
+                          process.env.TOKEN,
                           {expiresIn:'24h'}  
                         )
                     })
