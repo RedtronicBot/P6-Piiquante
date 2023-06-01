@@ -62,8 +62,7 @@ exports.deleteSauce = (req,res,next)=>{
         var url = sauce.imageUrl
         var decoupageChemin = `.${url.substring(url.indexOf("/", url.indexOf("//") + 2))}`
         fs.unlink(decoupageChemin, (err => {console.log(err)}))
-        }
-    )
+    })
     .catch(error => res.status(400).json({error}))
     Sauces.deleteOne({_id:req.params.id})
     .then(() => res.status(200).json({message:'Sauce supprimé'}))
